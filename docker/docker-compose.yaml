@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
       target: development
       args:
-        L4T_VERSION_MAJOR: 36 # jetpack version 36.4.0 
+        L4T_VERSION_MAJOR: 36
         L4T_VERSION_MINOR: 4
         L4T_VERSION_PATCH: 0
         ROS2_WRAPPER_FOLDER: /home/ros2_EB_ws
@@ -17,14 +17,14 @@ services:
       - /dev/:/dev/
       - /usr/local/zed/resources/:/usr/local/zed/resources/
       - /tmp/.X11-unix/:/tmp/.X11-unix
-      - /home/robotlab/.Xauthority:/root/.Xauthority:roo
+      - ${XAUTHORITY:-${HOME}/.Xauthority}:/root/.Xauthority:ro
       - /dev/shm:/dev/shm
     working_dir: /home/workspace
     stdin_open: true
     tty: true
     environment:
       - ROS_DOMAIN_ID=0
-      - DISPLAY=:10.0
+      - DISPLAY=${DISPLAY}
       - XAUTHORITY=/root/.Xauthority
       - QT_X11_NO_MITSHM=1
       - NVIDIA_DRIVER_CAPABILITIES=all
