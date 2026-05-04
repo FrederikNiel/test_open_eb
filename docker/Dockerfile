@@ -175,7 +175,8 @@ RUN apt-get update && apt-get install -y x11-apps
 #Zenoh UDP
 RUN apt-get update && apt-get install -y ros-humble-rmw-zenoh-cpp
 
-
+    ### tmux -only 1 ssh session at a time.
+RUN apt-get update && apt-get install -y tmux
 
 # Clean up
 RUN rm -rf /var/lib/apt/lists/*
