@@ -5,6 +5,7 @@
 
 # --- Configuration ---
 COMPOSE_FILE="docker-compose.yaml"
+COMPOSE_PROJECT_NAME="openeb"
 
 # --- Functions ---
 print_usage() {
@@ -13,13 +14,13 @@ print_usage() {
     echo "This script runs specified services using Docker Compose."
     echo ""
     echo "REQUIRED:"
-    echo "  SERVICE           The main service to run (e.g., rover, cameras)."
+    echo "  SERVICE           The main service to run (e.g., event_cam)."
     echo ""
     echo "OPTIONS:"
     echo "  --help, -h        Show this help message."
     echo ""
     echo "EXAMPLES:"
-    echo "  $0 rover"
+    echo "  $0 event_cam"
 }
 
 # --- Argument Parsing ---
@@ -35,7 +36,7 @@ fi
 # Initialize variables
 SERVICE_NAME="$1"
 CONTAINER_NAME="$SERVICE_NAME"
-if [[ "$SERVICE_NAME" == "rover" ]]; then
+if [[ "$SERVICE_NAME" == "event_cam" ]]; then
     CONTAINER_NAME="openeb"
 fi
 shift # Consume the service name argument
@@ -52,11 +53,11 @@ echo "[INFO] Starting services: $SERVICES"
 sudo modprobe iptable_raw 2>/dev/null || true
 
 # Execute docker compose
-docker compose -f "$COMPOSE_FILE" up $SERVICES --detach --build --remove-orphans
+COMPOSE_PROJECT_NAME="$COMPOSE_PROJECT_NAME" docker compose -f "$COMPOSE_FILE" up $SERVICES --detach --build --remove-orphans
 
 # --- Post-run Information ---
 echo ""
 echo "[INFO] ✅ Launch complete!"
-echo "[INFO] Use 'docker compose -f $COMPOSE_FILE logs -f' to view logs of all running services."
-echo "[INFO] Use 'docker compose -f $COMPOSE_FILE down' to stop all services."
+echo "[INFO] Use 'COMPOSE_PROJECT_NAME=$COMPOSE_PROJECT_NAME docker compose -f $COMPOSE_FILE logs -f' to view logs of all running services."
+echo "[INFO] Use 'COMPOSE_PROJECT_NAME=$COMPOSE_PROJECT_NAME docker compose -f $COMPOSE_FILE down' to stop all services."
 echo "[INFO] To access the main container, run: docker exec -it ${CONTAINER_NAME} bash"
