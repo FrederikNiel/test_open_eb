@@ -154,7 +154,8 @@ ENV PYTHONPATH=${OPENEB_BUILD}/py3:${OPENEB_SRC}/sdk/modules/core/python/pypkg:$
 
 # Install pip and Python packages
 RUN apt-get update && apt-get install -y python3-pip && \
-    pip3 install setuptools Cython wheel colcon-common-extensions canopen Jetson.GPIO
+    pip3 install setuptools Cython wheel colcon-common-extensions canopen Jetson.GPIO && \
+    pip3 install zenoh==0.4.0
 
 RUN apt-get install busybox && apt-get install iproute2 -y && \
     apt-get install net-tools -y
@@ -166,6 +167,15 @@ RUN apt-get install busybox && apt-get install iproute2 -y && \
 #####################################
 
 RUN apt-get update && apt-get install -y ros-humble-rosbridge-server ros-humble-rmw-zenoh-cpp
+
+    # xeyes
+
+RUN apt-get update && apt-get install -y x11-apps
+
+#Zenoh UDP
+RUN apt-get update && apt-get install -y ros-humble-rmw-zenoh-cpp
+
+
 
 # Clean up
 RUN rm -rf /var/lib/apt/lists/*
@@ -220,12 +230,6 @@ RUN /bin/bash -c "source /opt/ros/humble/setup.bash && \
     --event-handlers console_direct+ \
     --cmake-args ' -DCMAKE_BUILD_TYPE=Release' \
     ' --no-warn-unused-cli'"
-
-
-    # xeyes
-
-RUN apt-get update && apt-get install -y x11-apps
-
 
 # Copy unified entrypoint script
 COPY docker/entrypoint.sh /entrypoint.sh

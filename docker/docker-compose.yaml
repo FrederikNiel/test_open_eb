@@ -1,5 +1,5 @@
 services:
-  rover:
+  event_cam:
     build:
       context: .
       dockerfile: Dockerfile
@@ -23,7 +23,8 @@ services:
     stdin_open: true
     tty: true
     environment:
-      - ROS_DOMAIN_ID=0
+      - ROS_DOMAIN_ID=50 #might be 0
+      - RMW_IMPLEMENTATION=rmw_zenoh_cpp
       - DISPLAY=${DISPLAY}
       - XAUTHORITY=/root/.Xauthority
       - QT_X11_NO_MITSHM=1
